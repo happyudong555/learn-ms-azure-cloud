@@ -1,0 +1,16 @@
+{
+	"name": "GoogleBigQueryNative",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "GoogleBigQuery1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "GoogleBigQueryObject",
+		"schema": [],
+		"typeProperties": {
+			"dataset": "rosy-rider-380405.IICS_demo",
+			"table": "employees"
+		}
+	}
+}
