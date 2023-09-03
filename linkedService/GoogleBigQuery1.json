@@ -1,0 +1,19 @@
+{
+	"name": "GoogleBigQuery1",
+	"properties": {
+		"annotations": [],
+		"type": "GoogleBigQuery",
+		"typeProperties": {
+			"project": "rosy-rider-380405",
+			"requestGoogleDriveScope": false,
+			"authenticationType": "ServiceAuthentication",
+			"email": "service-account@rosy-rider-380405.iam.gserviceaccount.com",
+			"keyFilePath": "C:\\Program Files\\GCP-service-key\\rosy-rider-380405-991ff77e39d2.json",
+			"useSystemTrustStore": false
+		},
+		"connectVia": {
+			"referenceName": "yipsol-onPrem-dev",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
