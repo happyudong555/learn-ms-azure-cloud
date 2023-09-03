@@ -1,0 +1,16 @@
+{
+	"name": "GoogleBigQuery",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "GoogleBigQueryConnector",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "GoogleBigQueryObject",
+		"schema": [],
+		"typeProperties": {
+			"dataset": "IICS_demo",
+			"table": "employees"
+		}
+	}
+}

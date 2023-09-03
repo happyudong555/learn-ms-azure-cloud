@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Basic_ETL",
-				"type": "ExecuteDataFlow",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,24 +15,17 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "Basic_ETL",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"source": {
-								"raw_data": "employees"
-							}
-						}
+					"source": {
+						"type": "GoogleBigQuerySource"
 					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "None",
-					"cacheSinks": {
-						"firstRowOnly": true
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "GoogleBigQuery",
+						"type": "DatasetReference"
 					}
-				}
+				]
 			}
 		],
 		"folder": {
