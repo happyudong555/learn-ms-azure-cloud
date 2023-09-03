@@ -1,0 +1,19 @@
+{
+	"name": "BigQueryConnector",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Odbc",
+		"typeProperties": {
+			"connectionString": {
+				"type": "SecureString",
+				"value": "**********"
+			},
+			"authenticationType": "Anonymous"
+		},
+		"connectVia": {
+			"referenceName": "yipsol-onPrem-dev",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
