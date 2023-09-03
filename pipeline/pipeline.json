@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "BigQuery 2 AzureSQL",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,20 +16,18 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "GoogleBigQuerySource"
+						"type": "OdbcSource",
+						"queryTimeout": "02:00:00"
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
+					"dataIntegrationUnits": 2,
 					"translator": {
 						"type": "TabularTranslator",
 						"typeConversion": true,
@@ -41,14 +39,17 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "GoogleBigQuery",
+						"referenceName": "BigQuery",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "blobStorage",
-						"type": "DatasetReference"
+						"referenceName": "AzureSqlTable",
+						"type": "DatasetReference",
+						"parameters": {
+							"raw_data": "employees"
+						}
 					}
 				]
 			}

@@ -1,0 +1,15 @@
+{
+	"name": "BigQuery",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BigQueryConnector",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OdbcTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`IICS_demo`.`employees`"
+		}
+	}
+}
