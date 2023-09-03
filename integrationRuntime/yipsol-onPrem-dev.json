@@ -1,0 +1,6 @@
+{
+	"name": "yipsol-onPrem-dev",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
