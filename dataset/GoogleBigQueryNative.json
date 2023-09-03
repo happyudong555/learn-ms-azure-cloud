@@ -9,7 +9,7 @@
 		"type": "GoogleBigQueryObject",
 		"schema": [],
 		"typeProperties": {
-			"dataset": "rosy-rider-380405.IICS_demo",
+			"dataset": "IICS_demo",
 			"table": "employees"
 		}
 	}
