@@ -11,6 +11,9 @@
 		"AzureSqlDatabase_connectionString": {
 			"value": ""
 		},
+		"BigQueryConnector_connectionString": {
+			"value": ""
+		},
 		"containerUri": {
 			"value": ""
 		},

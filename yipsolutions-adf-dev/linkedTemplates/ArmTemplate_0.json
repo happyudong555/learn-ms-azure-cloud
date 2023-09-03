@@ -14,6 +14,10 @@
 		"AzureSqlDatabase_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase'"
+		},
+		"BigQueryConnector_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BigQueryConnector'"
 		}
 	},
 	"variables": {
@@ -42,6 +46,16 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/yipsol-onPrem-dev')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageConnector')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -52,12 +66,12 @@
 					"connectionString": "[parameters('AzureBlobStorageConnector_connectionString')]"
 				},
 				"connectVia": {
-					"referenceName": "yipsol-cloud-dev",
+					"referenceName": "yipsol-onPrem-dev",
 					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/yipsol-cloud-dev')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/yipsol-onPrem-dev')]"
 			]
 		},
 		{
@@ -71,12 +85,35 @@
 					"connectionString": "[parameters('AzureSqlDatabase_connectionString')]"
 				},
 				"connectVia": {
-					"referenceName": "yipsol-cloud-dev",
+					"referenceName": "yipsol-onPrem-dev",
 					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/yipsol-cloud-dev')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/yipsol-onPrem-dev')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BigQueryConnector')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Odbc",
+				"typeProperties": {
+					"connectionString": {
+						"type": "SecureString",
+						"value": "[parameters('BigQueryConnector_connectionString')]"
+					},
+					"authenticationType": "Anonymous"
+				},
+				"connectVia": {
+					"referenceName": "yipsol-onPrem-dev",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/yipsol-onPrem-dev')]"
 			]
 		},
 		{
@@ -162,92 +199,23 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/blobStorage')]",
+			"name": "[concat(parameters('factoryName'), '/BigQuery')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureBlobStorageConnector",
+					"referenceName": "BigQueryConnector",
 					"type": "LinkedServiceReference"
 				},
-				"folder": {
-					"name": "raw_data"
-				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "OdbcTable",
+				"schema": [],
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "container-storage"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageConnector')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Basic_ETL')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "flows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "AzureSqlTable",
-								"type": "DatasetReference"
-							},
-							"name": "source"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "blobStorage",
-								"type": "DatasetReference"
-							},
-							"name": "target"
-						}
-					],
-					"transformations": [],
-					"scriptLines": [
-						"source(output(",
-						"          EMPLOYEE_ID as long,",
-						"          FIRST_NAME as string,",
-						"          LAST_NAME as string,",
-						"          EMAIL as string,",
-						"          PHONE_NUMBER as string,",
-						"          HIRE_DATE as timestamp,",
-						"          JOB_ID as string,",
-						"          SALARY as long,",
-						"          COMMISSION_PCT as string,",
-						"          MANAGER_ID as string,",
-						"          DEPARTMENT_ID as long",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> source",
-						"source sink(allowSchemaDrift: true,",
-						"     validateSchema: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> target"
-					]
+					"tableName": "`IICS_demo`.`employees`"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable')]",
-				"[concat(variables('factoryId'), '/datasets/blobStorage')]"
+				"[concat(variables('factoryId'), '/linkedServices/BigQueryConnector')]"
 			]
 		},
 		{
@@ -257,8 +225,8 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Basic_ETL",
-						"type": "ExecuteDataFlow",
+						"name": "BigQuery 2 AzureSQL",
+						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -269,27 +237,44 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Basic_ETL",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source": {
-										"raw_data": "employees"
-									},
-									"target": {}
+							"source": {
+								"type": "OdbcSource",
+								"queryTimeout": "02:00:00"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"dataIntegrationUnits": 2,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
 								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "yipsol-cloud-dev",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "None",
-							"cacheSinks": {
-								"firstRowOnly": true
 							}
-						}
+						},
+						"inputs": [
+							{
+								"referenceName": "BigQuery",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTable",
+								"type": "DatasetReference",
+								"parameters": {
+									"raw_data": "employees"
+								}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -302,8 +287,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Basic_ETL')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/yipsol-cloud-dev')]"
+				"[concat(variables('factoryId'), '/datasets/BigQuery')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable')]"
 			]
 		}
 	]
