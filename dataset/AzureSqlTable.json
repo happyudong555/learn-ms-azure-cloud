@@ -1,0 +1,77 @@
+{
+	"name": "AzureSqlTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"raw_data": {
+				"type": "String",
+				"defaultValue": "employees"
+			}
+		},
+		"folder": {
+			"name": "raw_data"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EMPLOYEE_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "FIRST_NAME",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LAST_NAME",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EMAIL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PHONE_NUMBER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HIRE_DATE",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "JOB_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SALARY",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "COMMISSION_PCT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MANAGER_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DEPARTMENT_ID",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "demo",
+			"table": {
+				"value": "@dataset().raw_data",
+				"type": "Expression"
+			}
+		}
+	}
+}
