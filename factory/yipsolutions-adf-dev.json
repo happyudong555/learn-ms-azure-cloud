@@ -1,10 +1,5 @@
 {
 	"name": "yipsolutions-adf-dev",
-	"properties": {
-		"globalConfigurations": {
-			"PipelineBillingEnabled": "true"
-		}
-	},
 	"location": "southeastasia",
 	"identity": {
 		"type": "SystemAssigned",
