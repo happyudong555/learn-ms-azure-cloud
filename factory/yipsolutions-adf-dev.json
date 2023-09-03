@@ -1,0 +1,9 @@
+{
+	"name": "yipsolutions-adf-dev",
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "68d531a1-a5b7-452f-b559-0f2a1601a477",
+		"tenantId": "9d8bf1fe-cfc9-4eea-afc2-80b0bc2b5910"
+	}
+}
