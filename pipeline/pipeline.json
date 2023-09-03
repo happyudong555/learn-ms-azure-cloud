@@ -16,7 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "GoogleBigQuerySource"
+						"type": "OdbcSource",
+						"queryTimeout": "02:00:00"
 					},
 					"sink": {
 						"type": "AzureSqlSink",
@@ -161,7 +162,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "GoogleBigQueryNative",
+						"referenceName": "BigQuery",
 						"type": "DatasetReference"
 					}
 				],
